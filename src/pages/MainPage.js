@@ -7,7 +7,7 @@ const MainPage = () => {
     <Container fluid>
       <br />
       <Row>
-        <Col md={5}>
+        <Col sm={12} md={6} lg={4}>
           <Stack gap={3}>
             <DetectionForm />
             <InvoiceForm />
