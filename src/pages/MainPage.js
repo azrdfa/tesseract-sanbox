@@ -8,6 +8,12 @@ const MainPage = () => {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [invoiceFormInputFocus, setInvoiceFormInputFocus] = useState("");
+  const [invoicePayload, setInvoicePayload] = useState({
+    invoiceNumber: "",
+    invoiceDate: "",
+    dueDate: "",
+    products: [{ description: "", quantity: 0, price: 0 }]
+  })
 
   const setDataWords = (words) => {
     setData({ ...data, words })
@@ -23,7 +29,11 @@ const MainPage = () => {
               setDataWords={setDataWords}
               isLoading={isLoading}
               setIsLoading={setIsLoading} />
-            <InvoiceForm setInvoiceFormInputFocus={setInvoiceFormInputFocus} />
+            <InvoiceForm
+              setInvoiceFormInputFocus={setInvoiceFormInputFocus}
+              invoicePayload={invoicePayload}
+              setInvoicePayload={setInvoicePayload}
+            />
           </Stack>
         </Col>
         <Col sm={12} md={6} lg={4}>
@@ -31,6 +41,8 @@ const MainPage = () => {
             words={data.words}
             isLoading={isLoading}
             invoiceFormInputFocus={invoiceFormInputFocus}
+            invoicePayload={invoicePayload}
+            setInvoicePayload={setInvoicePayload}
           />
         </Col>
       </Row>
