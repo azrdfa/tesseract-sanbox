@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Card, Form, Stack, Button } from 'react-bootstrap';
 
-const InvoiceForm = () => {
+const InvoiceForm = ({ setInvoiceFormInputFocus }) => {
 
   const [payload, setPayload] = useState({
     invoiceNumber: "",
@@ -12,6 +12,16 @@ const InvoiceForm = () => {
 
   const onInvoiceNumberInputChange = (event) => {
     setPayload({ ...payload, invoiceNumber: event.target.value })
+  }
+
+  const onInputFocus = (inputName) => {
+    return (event) => {
+      setInvoiceFormInputFocus(inputName)
+    }
+  }
+
+  const onInputBlur = (event) => {
+    setInvoiceFormInputFocus("")
   }
 
   const onInvoiceDateInputChange = (event) => {
@@ -30,28 +40,28 @@ const InvoiceForm = () => {
   const onRemoveProductButtonClick = (index) => {
     return (event) => {
       event.preventDefault()
-      setPayload({...payload, products: payload.products.filter((_elem, elemIndex) => index !== elemIndex)})
+      setPayload({ ...payload, products: payload.products.filter((_elem, elemIndex) => index !== elemIndex) })
     }
   }
 
   const onProductDescriptionInputChange = (index) => {
     return (event) => {
       payload.products[index].description = event.target.value;
-      setPayload({...payload})
+      setPayload({ ...payload })
     }
   }
 
   const onProductQuantityInputChange = (index) => {
     return (event) => {
       payload.products[index].quantity = event.target.value;
-      setPayload({...payload})
+      setPayload({ ...payload })
     }
   }
 
   const onProductPriceInputChange = (index) => {
     return (event) => {
       payload.products[index].price = event.target.value;
-      setPayload({...payload})
+      setPayload({ ...payload })
     }
   }
 
@@ -64,30 +74,68 @@ const InvoiceForm = () => {
         <Form>
           <Form.Group className="mb-3" controlId="invoiceNumberInput">
             <Form.Label>Invoice Number</Form.Label>
-            <Form.Control type="text" placeholder='Enter Invoice Number' value={payload.invoiceNumber} onChange={onInvoiceNumberInputChange} />
+            <Form.Control
+              type="text"
+              placeholder='Enter Invoice Number'
+              value={payload.invoiceNumber} onChange={onInvoiceNumberInputChange}
+              onFocus={onInputFocus("InvoiceNumber")}
+              onBlur={onInputBlur}
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="invoiceDateInput">
             <Form.Label>Invoice Date</Form.Label>
-            <Form.Control type="date" placeholder='Enter Invoice Date' value={payload.invoiceDate} onChange={onInvoiceDateInputChange} />
+            <Form.Control
+              type="date"
+              placeholder='Enter Invoice Date'
+              value={payload.invoiceDate}
+              onChange={onInvoiceDateInputChange}
+              onFocus={onInputFocus("InvoiceDate")}
+              onBlur={onInputBlur}
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="dueDateInput">
             <Form.Label>Due Date</Form.Label>
-            <Form.Control type="date" placeholder='Enter Due Date' value={payload.dueDate} onChange={onDueDateInputChange} />
+            <Form.Control
+              type="date"
+              placeholder='Enter Due Date'
+              value={payload.dueDate}
+              onChange={onDueDateInputChange}
+              onFocus={onInputFocus("DueDate")}
+              onBlur={onInputBlur}
+            />
           </Form.Group>
           {payload.products.map((elem, index) => {
             return (
               <Stack key={index} className='mb-3' direction='horizontal' gap={1}>
                 <Form.Group>
                   <Form.Label column="sm">Desc</Form.Label>
-                  <Form.Control value={elem.description} onChange={onProductDescriptionInputChange(index)} placeholder='...' />
+                  <Form.Control
+                    value={elem.description}
+                    onChange={onProductDescriptionInputChange(index)}
+                    placeholder='...'
+                    onFocus={onInputFocus(`ProductDescription${index}`)}
+                    onBlur={onInputBlur}
+                  />
                 </Form.Group>
                 <Form.Group>
                   <Form.Label column="sm">Quantity</Form.Label>
-                  <Form.Control value={elem.quantity} onChange={onProductQuantityInputChange(index)} placeholder='...' />
+                  <Form.Control
+                    value={elem.quantity}
+                    onChange={onProductQuantityInputChange(index)}
+                    placeholder='...'
+                    onFocus={onInputFocus(`ProductQuantity${index}`)}
+                    onBlur={onInputBlur}
+                  />
                 </Form.Group>
                 <Form.Group>
                   <Form.Label column="sm">Price</Form.Label>
-                  <Form.Control value={elem.price} onChange={onProductPriceInputChange(index)} placeholder='...' />
+                  <Form.Control
+                    value={elem.price}
+                    onChange={onProductPriceInputChange(index)}
+                    placeholder='...'
+                    onFocus={onInputFocus(`ProductPrice${index}`)}
+                    onBlur={onInputBlur}
+                  />
                 </Form.Group>
                 <Button
                   onClick={index === payload.products.length - 1 ? onAddProductButtonClick : onRemoveProductButtonClick(index)}
