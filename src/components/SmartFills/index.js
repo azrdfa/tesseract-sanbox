@@ -1,3 +1,3 @@
-import WordsSmartFill from "./WordsSmartFill";
+import SmartFillContainer from "./SmartFillContainer";
 
-export { WordsSmartFill }
+export { SmartFillContainer }

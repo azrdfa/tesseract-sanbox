@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Container, Row, Col, Stack } from 'react-bootstrap'
-import { DetectionForm, InvoiceForm, WordsSmartFill } from '../components'
+import { DetectionForm, InvoiceForm, SmartFillContainer } from '../components'
 
 const MainPage = () => {
   const [data, setData] = useState({
@@ -37,7 +37,7 @@ const MainPage = () => {
           </Stack>
         </Col>
         <Col sm={12} md={6} lg={4}>
-          <WordsSmartFill
+          <SmartFillContainer
             words={data.words}
             isLoading={isLoading}
             invoiceFormInputFocus={invoiceFormInputFocus}

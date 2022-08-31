@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Alert, Button, Card, Spinner, Toast, ToastContainer } from 'react-bootstrap';
 import moment from 'moment'
 
-const WordsSmartFill = ({ words, isLoading, invoiceFormInputFocus, invoicePayload, setInvoicePayload }) => {
+const SmartFillContainer = ({ words, isLoading, invoiceFormInputFocus, invoicePayload, setInvoicePayload }) => {
 	const [showErrorToast, setShowErrorToast] = useState(false)
 	const [errorToastMsg, setErrorToastMsg] = useState("")
 
@@ -95,7 +95,7 @@ const WordsSmartFill = ({ words, isLoading, invoiceFormInputFocus, invoicePayloa
 	return (
 		<>
 			<Card>
-				<Card.Header>Words SmartFill</Card.Header>
+				<Card.Header>SmartFill</Card.Header>
 				<Card.Body>
 					{isLoading && <div className='d-flex justify-content-center m-3'><Spinner animation="border" variant="primary" size="lg" /></div>}
 					<FocusAlert />
@@ -123,4 +123,4 @@ const WordsSmartFill = ({ words, isLoading, invoiceFormInputFocus, invoicePayloa
 	)
 }
 
-export default WordsSmartFill
+export default SmartFillContainer
