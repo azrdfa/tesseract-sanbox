@@ -14,6 +14,7 @@ const MainPage = () => {
     dueDate: "",
     products: [{ description: "", quantity: 0, price: 0 }]
   })
+  const [imageUrl, setImageUrl] = useState("");
 
   const setDataWords = (words) => {
     setData({ ...data, words })
@@ -28,7 +29,9 @@ const MainPage = () => {
           <DetectionForm
               setDataWords={setDataWords}
               isLoading={isLoading}
-              setIsLoading={setIsLoading} />
+              setIsLoading={setIsLoading} 
+              setImageUrl={setImageUrl}
+              />
             <InvoiceForm
               setInvoiceFormInputFocus={setInvoiceFormInputFocus}
               invoicePayload={invoicePayload}
@@ -43,6 +46,7 @@ const MainPage = () => {
             invoiceFormInputFocus={invoiceFormInputFocus}
             invoicePayload={invoicePayload}
             setInvoicePayload={setInvoicePayload}
+            imageUrl={imageUrl}
           />
         </Col>
       </Row>

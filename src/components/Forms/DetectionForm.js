@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { createWorker } from 'tesseract.js';
 import { Button, Card, Form, Toast, ToastContainer } from 'react-bootstrap';
 
-const DetectionForm = ({ setDataWords, isLoading, setIsLoading }) => {
+const DetectionForm = ({ setDataWords, isLoading, setIsLoading, setImageUrl }) => {
 	const [payload, setPayload] = useState("")
 	const [showErrorToast, setShowErrorToast] = useState(false)
 
@@ -20,6 +20,7 @@ const DetectionForm = ({ setDataWords, isLoading, setIsLoading }) => {
 		try {
 			setIsLoading(true)
 			setDataWords([])
+			setImageUrl("")
 			await worker.load();
 			await worker.loadLanguage('eng');
 			await worker.initialize('eng');
@@ -29,6 +30,7 @@ const DetectionForm = ({ setDataWords, isLoading, setIsLoading }) => {
 			const res = await worker.recognize(payload);
 			await worker.terminate();
 			setDataWords(res.data.words)
+			setImageUrl(payload)
 		} catch (error) {
 			setShowErrorToast(true)
 		} finally {

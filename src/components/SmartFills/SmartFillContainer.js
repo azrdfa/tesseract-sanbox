@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
-import { Alert, Button, Card, Spinner, Toast, ToastContainer } from 'react-bootstrap';
+import { Alert, Card, Spinner, Toast, ToastContainer, Form } from 'react-bootstrap';
 import moment from 'moment'
+import WordsSmartFill from './WordsSmartFill';
+import BoxesSmartFill from './BoxesSmartFill';
 
-const SmartFillContainer = ({ words, isLoading, invoiceFormInputFocus, invoicePayload, setInvoicePayload }) => {
+const SmartFillContainer = ({ words, isLoading, invoiceFormInputFocus, invoicePayload, setInvoicePayload, imageUrl }) => {
 	const [showErrorToast, setShowErrorToast] = useState(false)
 	const [errorToastMsg, setErrorToastMsg] = useState("")
+	const [smartFillOption, setSmartFillOption] = useState("words");
 
 	const onWordButtonClick = (word) => {
 		return () => {
@@ -67,6 +70,10 @@ const SmartFillContainer = ({ words, isLoading, invoiceFormInputFocus, invoicePa
 		setShowErrorToast(false);
 	}
 
+	const onSmartFillOptionsSelectChange = (event) => {
+		setSmartFillOption(event.target.value)
+	}
+
 	const FocusAlert = () => {
 		if (!isLoading && invoiceFormInputFocus && words.length) {
 			if (invoiceFormInputFocus === "InvoiceNumber") {
@@ -97,13 +104,17 @@ const SmartFillContainer = ({ words, isLoading, invoiceFormInputFocus, invoicePa
 			<Card>
 				<Card.Header>SmartFill</Card.Header>
 				<Card.Body>
+					<Form.Group className="mb-3">
+						<Form.Label>SmartFill Options</Form.Label>
+						<Form.Select onChange={onSmartFillOptionsSelectChange}>
+							<option value="words">Words</option>
+							<option value="boxes">Boxes</option>
+						</Form.Select>
+					</Form.Group>
 					{isLoading && <div className='d-flex justify-content-center m-3'><Spinner animation="border" variant="primary" size="lg" /></div>}
 					<FocusAlert />
-					{!isLoading && words.map((elem, index) => {
-						return (
-							<Button key={index} style={{ margin: "4px" }} onClick={onWordButtonClick(elem.text)}>{elem.text}</Button>
-						)
-					})}
+					{!isLoading && smartFillOption === "words" && <WordsSmartFill words={words} onWordButtonClick={onWordButtonClick} />}
+					{!isLoading && smartFillOption === "boxes" && <BoxesSmartFill words={words} onWordButtonClick={onWordButtonClick} imageUrl={imageUrl} />}
 				</Card.Body>
 			</Card>
 			<ToastContainer className="p-3" position="top-end">
