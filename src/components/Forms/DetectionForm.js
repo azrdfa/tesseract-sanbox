@@ -16,7 +16,7 @@ const DetectionForm = ({ setDataWords, isLoading, setIsLoading }) => {
 
 	const onButtonSubmit = async (event) => {
 		event.preventDefault();
-		const worker = createWorker({ logger: m => console.log(m) });
+		const worker = createWorker();
 		try {
 			setIsLoading(true)
 			setDataWords([])
