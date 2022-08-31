@@ -1,17 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Card, Form, Stack, Button } from 'react-bootstrap';
 
-const InvoiceForm = ({ setInvoiceFormInputFocus }) => {
-
-  const [payload, setPayload] = useState({
-    invoiceNumber: "",
-    invoiceDate: "",
-    dueDate: "",
-    products: [{ description: "", quantity: 0, price: 0 }]
-  })
+const InvoiceForm = ({ setInvoiceFormInputFocus, invoicePayload, setInvoicePayload }) => {
 
   const onInvoiceNumberInputChange = (event) => {
-    setPayload({ ...payload, invoiceNumber: event.target.value })
+    setInvoicePayload({ ...invoicePayload, invoiceNumber: event.target.value })
   }
 
   const onInputFocus = (inputName) => {
@@ -20,48 +13,44 @@ const InvoiceForm = ({ setInvoiceFormInputFocus }) => {
     }
   }
 
-  const onInputBlur = (event) => {
-    setInvoiceFormInputFocus("")
-  }
-
   const onInvoiceDateInputChange = (event) => {
-    setPayload({ ...payload, invoiceDate: event.target.value })
+    setInvoicePayload({ ...invoicePayload, invoiceDate: event.target.value })
   }
 
   const onDueDateInputChange = (event) => {
-    setPayload({ ...payload, dueDate: event.target.value })
+    setInvoicePayload({ ...invoicePayload, dueDate: event.target.value })
   }
 
   const onAddProductButtonClick = (event) => {
     event.preventDefault();
-    setPayload({ ...payload, products: [...payload.products, { description: "", quantity: 0, price: 0 }] })
+    setInvoicePayload({ ...invoicePayload, products: [...invoicePayload.products, { description: "", quantity: 0, price: 0 }] })
   }
 
   const onRemoveProductButtonClick = (index) => {
     return (event) => {
       event.preventDefault()
-      setPayload({ ...payload, products: payload.products.filter((_elem, elemIndex) => index !== elemIndex) })
+      setInvoicePayload({ ...invoicePayload, products: invoicePayload.products.filter((_elem, elemIndex) => index !== elemIndex) })
     }
   }
 
   const onProductDescriptionInputChange = (index) => {
     return (event) => {
-      payload.products[index].description = event.target.value;
-      setPayload({ ...payload })
+      invoicePayload.products[index].description = event.target.value;
+      setInvoicePayload({ ...invoicePayload })
     }
   }
 
   const onProductQuantityInputChange = (index) => {
     return (event) => {
-      payload.products[index].quantity = event.target.value;
-      setPayload({ ...payload })
+      invoicePayload.products[index].quantity = event.target.value;
+      setInvoicePayload({ ...invoicePayload })
     }
   }
 
   const onProductPriceInputChange = (index) => {
     return (event) => {
-      payload.products[index].price = event.target.value;
-      setPayload({ ...payload })
+      invoicePayload.products[index].price = event.target.value;
+      setInvoicePayload({ ...invoicePayload })
     }
   }
 
@@ -77,9 +66,8 @@ const InvoiceForm = ({ setInvoiceFormInputFocus }) => {
             <Form.Control
               type="text"
               placeholder='Enter Invoice Number'
-              value={payload.invoiceNumber} onChange={onInvoiceNumberInputChange}
+              value={invoicePayload.invoiceNumber} onChange={onInvoiceNumberInputChange}
               onFocus={onInputFocus("InvoiceNumber")}
-              onBlur={onInputBlur}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="invoiceDateInput">
@@ -87,10 +75,10 @@ const InvoiceForm = ({ setInvoiceFormInputFocus }) => {
             <Form.Control
               type="date"
               placeholder='Enter Invoice Date'
-              value={payload.invoiceDate}
+              value={invoicePayload.invoiceDate}
               onChange={onInvoiceDateInputChange}
               onFocus={onInputFocus("InvoiceDate")}
-              onBlur={onInputBlur}
+
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="dueDateInput">
@@ -98,13 +86,13 @@ const InvoiceForm = ({ setInvoiceFormInputFocus }) => {
             <Form.Control
               type="date"
               placeholder='Enter Due Date'
-              value={payload.dueDate}
+              value={invoicePayload.dueDate}
               onChange={onDueDateInputChange}
               onFocus={onInputFocus("DueDate")}
-              onBlur={onInputBlur}
+
             />
           </Form.Group>
-          {payload.products.map((elem, index) => {
+          {invoicePayload.products.map((elem, index) => {
             return (
               <Stack key={index} className='mb-3' direction='horizontal' gap={1}>
                 <Form.Group>
@@ -114,34 +102,36 @@ const InvoiceForm = ({ setInvoiceFormInputFocus }) => {
                     onChange={onProductDescriptionInputChange(index)}
                     placeholder='...'
                     onFocus={onInputFocus(`ProductDescription${index}`)}
-                    onBlur={onInputBlur}
+
                   />
                 </Form.Group>
                 <Form.Group>
                   <Form.Label column="sm">Quantity</Form.Label>
                   <Form.Control
                     value={elem.quantity}
+                    type="number"
                     onChange={onProductQuantityInputChange(index)}
                     placeholder='...'
                     onFocus={onInputFocus(`ProductQuantity${index}`)}
-                    onBlur={onInputBlur}
+
                   />
                 </Form.Group>
                 <Form.Group>
                   <Form.Label column="sm">Price</Form.Label>
                   <Form.Control
                     value={elem.price}
+                    type="number"
                     onChange={onProductPriceInputChange(index)}
                     placeholder='...'
                     onFocus={onInputFocus(`ProductPrice${index}`)}
-                    onBlur={onInputBlur}
+
                   />
                 </Form.Group>
                 <Button
-                  onClick={index === payload.products.length - 1 ? onAddProductButtonClick : onRemoveProductButtonClick(index)}
-                  variant={index === payload.products.length - 1 ? "primary" : "danger"}
+                  onClick={index === invoicePayload.products.length - 1 ? onAddProductButtonClick : onRemoveProductButtonClick(index)}
+                  variant={index === invoicePayload.products.length - 1 ? "primary" : "danger"}
                   className='mt-auto'>
-                  {index === payload.products.length - 1 ? "Add" : "Remove"}
+                  {index === invoicePayload.products.length - 1 ? "Add" : "Remove"}
                 </Button>
               </Stack>
             )
