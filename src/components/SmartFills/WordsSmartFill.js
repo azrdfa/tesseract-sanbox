@@ -52,7 +52,7 @@ const WordsSmartFill = ({ words, isLoading, invoiceFormInputFocus, invoicePayloa
 					const isValidProductPrice = !isNaN(parseInt(word));
 					if (isValidProductPrice) {
 						const productIndex = parseInt(invoiceFormInputFocus.charAt(invoiceFormInputFocus.length - 1))
-						invoicePayload.products[productIndex].quantity = parseInt(word);
+						invoicePayload.products[productIndex].price = parseInt(word);
 						setInvoicePayload({ ...invoicePayload })
 					} else {
 						setErrorToastMsg(`"${word}" isn't a valid number format`)
