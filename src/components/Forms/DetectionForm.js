@@ -24,9 +24,6 @@ const DetectionForm = ({ setDataWords, isLoading, setIsLoading, setImageUrl }) =
 			await worker.load();
 			await worker.loadLanguage('eng');
 			await worker.initialize('eng');
-			await worker.setParameters({
-				tessjs_create_box: '1',
-			});
 			const res = await worker.recognize(payload);
 			await worker.terminate();
 			setDataWords(res.data.words)
