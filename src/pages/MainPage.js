@@ -1,56 +1,65 @@
 import React, { useState } from 'react'
 import { Container, Row, Col, Stack } from 'react-bootstrap'
-import { DetectionForm, InvoiceForm, SmartFillContainer } from '../components'
+import { DetectionForm, InvoiceForm, SmartFillContainer, ErrorToast } from '../components'
 
 const MainPage = () => {
-  const [data, setData] = useState({
-    words: []
+  // DetectionForm as setter others as getter
+  const [ocrData, setOcrData] = useState({
+    sparse_texts: [],
+    segmentations: [],
+    imageUrl: ""
   })
-  const [isLoading, setIsLoading] = useState(false)
-  const [invoiceFormInputFocus, setInvoiceFormInputFocus] = useState("");
+  const [isLoadingOcrData, setIsLoadingOcrData] = useState(false)
+
+  // InvoiceForm as setter others as getter
   const [invoicePayload, setInvoicePayload] = useState({
     invoiceNumber: "",
     invoiceDate: "",
     dueDate: "",
     products: [{ description: "", quantity: 0, price: 0 }]
   })
-  const [imageUrl, setImageUrl] = useState("");
+  const [selectedInvoiceInput, setSelectedInvoiceInput] = useState("");
 
-  const setDataWords = (words) => {
-    setData({ ...data, words })
-  }
+  // ErrorToast as getter others as setter
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorToastMsg, setErrorToastMsg] = useState("")
 
   return (
     <Container fluid>
-      <br />
       <Row>
-        <Col sm={12} md={6} lg={4}>
+        <Col auto="true">
           <Stack gap={3}>
-          <DetectionForm
-              setDataWords={setDataWords}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading} 
-              setImageUrl={setImageUrl}
-              />
+            <DetectionForm
+              setOcrData={setOcrData}
+              isLoadingOcrData={isLoadingOcrData}
+              setIsLoadingOcrData={setIsLoadingOcrData}
+              setShowErrorToast={setShowErrorToast}
+              setErrorToastMsg={setErrorToastMsg}
+            />
             <InvoiceForm
-              setInvoiceFormInputFocus={setInvoiceFormInputFocus}
               invoicePayload={invoicePayload}
               setInvoicePayload={setInvoicePayload}
+              setSelectedInvoiceInput={setSelectedInvoiceInput}
             />
           </Stack>
         </Col>
-        <Col sm={12} md={6} lg={4}>
+        <Col auto="true">
           <SmartFillContainer
-            words={data.words}
-            isLoading={isLoading}
-            invoiceFormInputFocus={invoiceFormInputFocus}
+            ocrData={ocrData}
+            isLoadingOcrData={isLoadingOcrData}
             invoicePayload={invoicePayload}
             setInvoicePayload={setInvoicePayload}
-            imageUrl={imageUrl}
+            selectedInvoiceInput={selectedInvoiceInput}
+            setShowErrorToast={setShowErrorToast}
+            setErrorToastMsg={setErrorToastMsg}
           />
         </Col>
       </Row>
-      <br />
+      <ErrorToast
+        showErrorToast={showErrorToast}
+        setShowErrorToast={setShowErrorToast}
+        errorToastMsg={errorToastMsg}
+      />
     </Container>
   )
 }

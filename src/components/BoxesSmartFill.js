@@ -1,17 +1,24 @@
 import React, { useEffect, useRef, useMemo } from 'react'
 
-const BoxesSmartFill = ({ imageUrl, words, onWordButtonClick }) => {
+const BoxesSmartFill = ({ ocrData, onSparseTextClick }) => {
 	const canvasRef = useRef();
-	const rects = useMemo(() => {
-		return words.map(elem => {
-			return {x: elem.bbox.x0 , y: elem.bbox.y0, w: elem.bbox.x1 - elem.bbox.x0, h: elem.bbox.y1 - elem.bbox.y0, text: elem.text}
+	const sparseTextRects = useMemo(() => {
+		return ocrData.sparse_texts.map(elem => {
+			return {
+				x: elem.bbox.x0,
+				y: elem.bbox.y0,
+				w: elem.bbox.x1 - elem.bbox.x0,
+				h: elem.bbox.y1 - elem.bbox.y0,
+				text: elem.text
+			}
 		})
-	}, [words])
+	}, [ocrData.sparse_texts])
+
 	useEffect(() => {
 		const canvas = canvasRef.current
 		const context = canvas.getContext("2d")
 		const img = new Image();
-		img.src = imageUrl
+		img.src = ocrData.imageUrl
 
 		function collides(rects, x, y) {
 			var isCollision = false;
@@ -31,12 +38,9 @@ const BoxesSmartFill = ({ imageUrl, words, onWordButtonClick }) => {
 		}
 
 		function onCollisionClick(event) {
-			var [rect, collisionText] = collides(rects, event.offsetX, event.offsetY);
+			var [rect, collisionText] = collides(sparseTextRects, event.offsetX, event.offsetY);
 			if (rect) {
-				// console.log('collision: ' + rect.x + '/' + rect.y + " - " + collisionText);
-				onWordButtonClick(collisionText)()
-			} else {
-				// console.log('no collision');
+				onSparseTextClick(collisionText)
 			}
 		}
 
@@ -44,17 +48,17 @@ const BoxesSmartFill = ({ imageUrl, words, onWordButtonClick }) => {
 			canvas.width = img.width;
 			canvas.height = img.height;
 			context.drawImage(img, 0, 0)
-			rects.forEach(elem => {
+			sparseTextRects.forEach(elem => {
 				context.strokeRect(elem.x, elem.y, elem.w, elem.h);
 			})
 		}
 
 		canvas.addEventListener('click', onCollisionClick)
 		return () => canvas.removeEventListener("click", onCollisionClick)
-	}, [imageUrl, onWordButtonClick, rects])
+	}, [ocrData.imageUrl, onSparseTextClick, sparseTextRects])
 
 	return (
-		<canvas ref={canvasRef} style={{ border: "1px solid #d3d3d3", display: imageUrl ? "block" : "none" }} />
+		<canvas ref={canvasRef} style={{ border: "1px solid #d3d3d3", display: ocrData.imageUrl ? "block" : "none" }} />
 	)
 }
 

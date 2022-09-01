@@ -1,24 +1,48 @@
 import React from 'react'
 import { Card, Form, Stack, Button } from 'react-bootstrap';
 
-const InvoiceForm = ({ setInvoiceFormInputFocus, invoicePayload, setInvoicePayload }) => {
+const InvoiceForm = ({ invoicePayload, setInvoicePayload, setSelectedInvoiceInput }) => {
 
-  const onInvoiceNumberInputChange = (event) => {
-    setInvoicePayload({ ...invoicePayload, invoiceNumber: event.target.value })
-  }
-
-  const onInputFocus = (inputName) => {
+  const onInputChange = (inputName) => {
     return (event) => {
-      setInvoiceFormInputFocus(inputName)
+      switch (inputName) {
+        case "invoiceNumber":
+          setInvoicePayload({ ...invoicePayload, invoiceNumber: event.target.value })
+          break;
+        case "invoiceDate":
+          setInvoicePayload({ ...invoicePayload, invoiceDate: event.target.value })
+          break;
+        case "dueDate":
+          setInvoicePayload({ ...invoicePayload, dueDate: event.target.value })
+          break;
+        case (inputName.includes("productDescription")): {
+          const index = parseInt(inputName.charAt(inputName.length - 1))
+          invoicePayload.products[index].description = event.target.value;
+          setInvoicePayload({ ...invoicePayload })
+          break;
+        }
+        case (inputName.includes("productQuantity")): {
+          const index = parseInt(inputName.charAt(inputName.length - 1))
+          invoicePayload.products[index].quantity = event.target.value;
+          setInvoicePayload({ ...invoicePayload })
+          break;
+        }
+        case (inputName.includes("productPrice")): {
+          const index = parseInt(inputName.charAt(inputName.length - 1))
+          invoicePayload.products[index].price = event.target.value;
+          setInvoicePayload({ ...invoicePayload })
+          break;
+        }
+        default:
+          break;
+      }
     }
   }
 
-  const onInvoiceDateInputChange = (event) => {
-    setInvoicePayload({ ...invoicePayload, invoiceDate: event.target.value })
-  }
-
-  const onDueDateInputChange = (event) => {
-    setInvoicePayload({ ...invoicePayload, dueDate: event.target.value })
+  const onInputFocus = (inputName) => {
+    return () => {
+      setSelectedInvoiceInput(inputName)
+    }
   }
 
   const onAddProductButtonClick = (event) => {
@@ -30,27 +54,6 @@ const InvoiceForm = ({ setInvoiceFormInputFocus, invoicePayload, setInvoicePaylo
     return (event) => {
       event.preventDefault()
       setInvoicePayload({ ...invoicePayload, products: invoicePayload.products.filter((_elem, elemIndex) => index !== elemIndex) })
-    }
-  }
-
-  const onProductDescriptionInputChange = (index) => {
-    return (event) => {
-      invoicePayload.products[index].description = event.target.value;
-      setInvoicePayload({ ...invoicePayload })
-    }
-  }
-
-  const onProductQuantityInputChange = (index) => {
-    return (event) => {
-      invoicePayload.products[index].quantity = event.target.value;
-      setInvoicePayload({ ...invoicePayload })
-    }
-  }
-
-  const onProductPriceInputChange = (index) => {
-    return (event) => {
-      invoicePayload.products[index].price = event.target.value;
-      setInvoicePayload({ ...invoicePayload })
     }
   }
 
@@ -66,8 +69,9 @@ const InvoiceForm = ({ setInvoiceFormInputFocus, invoicePayload, setInvoicePaylo
             <Form.Control
               type="text"
               placeholder='Enter Invoice Number'
-              value={invoicePayload.invoiceNumber} onChange={onInvoiceNumberInputChange}
-              onFocus={onInputFocus("InvoiceNumber")}
+              value={invoicePayload.invoiceNumber}
+              onChange={onInputChange("invoiceNumber")}
+              onFocus={onInputFocus("invoiceNumber")}
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="invoiceDateInput">
@@ -76,8 +80,8 @@ const InvoiceForm = ({ setInvoiceFormInputFocus, invoicePayload, setInvoicePaylo
               type="date"
               placeholder='Enter Invoice Date'
               value={invoicePayload.invoiceDate}
-              onChange={onInvoiceDateInputChange}
-              onFocus={onInputFocus("InvoiceDate")}
+              onChange={onInputChange("invoiceDate")}
+              onFocus={onInputFocus("invoiceDate")}
 
             />
           </Form.Group>
@@ -87,8 +91,8 @@ const InvoiceForm = ({ setInvoiceFormInputFocus, invoicePayload, setInvoicePaylo
               type="date"
               placeholder='Enter Due Date'
               value={invoicePayload.dueDate}
-              onChange={onDueDateInputChange}
-              onFocus={onInputFocus("DueDate")}
+              onChange={onInputChange("dueDate")}
+              onFocus={onInputFocus("dueDate")}
 
             />
           </Form.Group>
@@ -98,32 +102,33 @@ const InvoiceForm = ({ setInvoiceFormInputFocus, invoicePayload, setInvoicePaylo
                 <Form.Group>
                   <Form.Label column="sm">Desc</Form.Label>
                   <Form.Control
-                    value={elem.description}
-                    onChange={onProductDescriptionInputChange(index)}
                     placeholder='...'
-                    onFocus={onInputFocus(`ProductDescription${index}`)}
+                    value={elem.description}
+                    onChange={onInputChange(`productDescription${index}`)}
+                    onFocus={onInputFocus(`productDescription${index}`)}
 
                   />
                 </Form.Group>
                 <Form.Group>
                   <Form.Label column="sm">Quantity</Form.Label>
                   <Form.Control
-                    value={elem.quantity}
                     type="number"
-                    onChange={onProductQuantityInputChange(index)}
                     placeholder='...'
-                    onFocus={onInputFocus(`ProductQuantity${index}`)}
+                    value={elem.quantity}
+
+                    onChange={onInputChange(`productQuantity${index}`)}
+                    onFocus={onInputFocus(`productQuantity${index}`)}
 
                   />
                 </Form.Group>
                 <Form.Group>
                   <Form.Label column="sm">Price</Form.Label>
                   <Form.Control
-                    value={elem.price}
                     type="number"
-                    onChange={onProductPriceInputChange(index)}
                     placeholder='...'
-                    onFocus={onInputFocus(`ProductPrice${index}`)}
+                    value={elem.price}
+                    onChange={onInputChange(`productPrice${index}`)}
+                    onFocus={onInputFocus(`productPrice${index}`)}
 
                   />
                 </Form.Group>
