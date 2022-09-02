@@ -49,10 +49,10 @@ const SmartFillContainer = ({ ocrData, isLoadingOcrData, invoicePayload, setInvo
 			}
 		}
 		else if (selectedInvoiceInput.includes("productPrice")) {
-			const isValidProductPrice = !isNaN(parseInt(sparseText));
+			const isValidProductPrice = !isNaN(parseFloat(sparseText.replace(',', '.')));
 			if (isValidProductPrice) {
 				const productIndex = parseInt(selectedInvoiceInput.charAt(selectedInvoiceInput.length - 1))
-				invoicePayload.products[productIndex].price = parseInt(sparseText);
+				invoicePayload.products[productIndex].price = parseFloat(sparseText.replace(',', '.'));
 				setInvoicePayload({ ...invoicePayload })
 			} else {
 				setErrorToastMsg(`"${sparseText}" isn't a valid number format`)
