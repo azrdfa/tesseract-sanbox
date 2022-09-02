@@ -27,7 +27,7 @@ const MainPage = () => {
   return (
     <Container fluid>
       <Row>
-        <Col auto="true">
+        <Col md={12} lg={3} className='mt-3'>
           <Stack gap={3}>
             <DetectionForm
               setOcrData={setOcrData}
@@ -43,7 +43,7 @@ const MainPage = () => {
             />
           </Stack>
         </Col>
-        <Col auto="true">
+        <Col md={12} lg={9} className='mt-3'>
           <SmartFillContainer
             ocrData={ocrData}
             isLoadingOcrData={isLoadingOcrData}
