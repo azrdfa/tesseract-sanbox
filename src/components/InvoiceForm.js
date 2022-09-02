@@ -5,36 +5,24 @@ const InvoiceForm = ({ invoicePayload, setInvoicePayload, setSelectedInvoiceInpu
 
   const onInputChange = (inputName) => {
     return (event) => {
-      switch (inputName) {
-        case "invoiceNumber":
-          setInvoicePayload({ ...invoicePayload, invoiceNumber: event.target.value })
-          break;
-        case "invoiceDate":
-          setInvoicePayload({ ...invoicePayload, invoiceDate: event.target.value })
-          break;
-        case "dueDate":
-          setInvoicePayload({ ...invoicePayload, dueDate: event.target.value })
-          break;
-        case (inputName.includes("productDescription")): {
-          const index = parseInt(inputName.charAt(inputName.length - 1))
-          invoicePayload.products[index].description = event.target.value;
-          setInvoicePayload({ ...invoicePayload })
-          break;
-        }
-        case (inputName.includes("productQuantity")): {
-          const index = parseInt(inputName.charAt(inputName.length - 1))
-          invoicePayload.products[index].quantity = event.target.value;
-          setInvoicePayload({ ...invoicePayload })
-          break;
-        }
-        case (inputName.includes("productPrice")): {
-          const index = parseInt(inputName.charAt(inputName.length - 1))
-          invoicePayload.products[index].price = event.target.value;
-          setInvoicePayload({ ...invoicePayload })
-          break;
-        }
-        default:
-          break;
+      if (inputName === "invoiceNumber") {
+        setInvoicePayload({ ...invoicePayload, invoiceNumber: event.target.value })
+      } else if (inputName === "invoiceDate") {
+        setInvoicePayload({ ...invoicePayload, invoiceDate: event.target.value })
+      } else if (inputName === "dueDate") {
+        setInvoicePayload({ ...invoicePayload, dueDate: event.target.value })
+      } else if (inputName.includes("productDescription")) {
+        const index = parseInt(inputName.charAt(inputName.length - 1))
+        invoicePayload.products[index].description = event.target.value;
+        setInvoicePayload({ ...invoicePayload })
+      } else if (inputName.includes("productQuantity")) {
+        const index = parseInt(inputName.charAt(inputName.length - 1))
+        invoicePayload.products[index].quantity = event.target.value;
+        setInvoicePayload({ ...invoicePayload })
+      } else if (inputName.includes("productPrice")) {
+        const index = parseInt(inputName.charAt(inputName.length - 1))
+        invoicePayload.products[index].price = event.target.value;
+        setInvoicePayload({ ...invoicePayload })
       }
     }
   }
@@ -127,6 +115,7 @@ const InvoiceForm = ({ invoicePayload, setInvoicePayload, setSelectedInvoiceInpu
                     type="number"
                     placeholder='...'
                     value={elem.price}
+                    step="0.01"
                     onChange={onInputChange(`productPrice${index}`)}
                     onFocus={onInputFocus(`productPrice${index}`)}
 
